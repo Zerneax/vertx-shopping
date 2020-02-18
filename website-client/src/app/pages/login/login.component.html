@@ -1,0 +1,19 @@
+<div class="container">
+  <div class="columns">
+    <div class="column col-6 col-mx-auto text-center">
+      <form [formGroup]="loginForm">
+        <div class="form-group">
+          <label class="form-label" for="input-lastName">LastName</label>
+          <input class="form-input" type="text" id="input-lastName" placeholder="last name" formControlName="lastName">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="input-firstName">firstName</label>
+          <input class="form-input" type="text" id="input-firstName" placeholder="first name" formControlName="firstName">
+        </div>
+
+        <button class="btn btn-primary" [disabled]="loginForm.invalid" (click)="login()">Login</button>
+      </form>
+    </div>
+  </div>
+</div>

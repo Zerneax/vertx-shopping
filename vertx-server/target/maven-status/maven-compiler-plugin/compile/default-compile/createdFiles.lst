@@ -1,0 +1,8 @@
+org/demo/vertx/utils/Utils.class
+org/demo/vertx/models/Order$OrderBuilder.class
+org/demo/vertx/dao/OrderDao.class
+org/demo/vertx/models/Order.class
+org/demo/vertx/resource/ApiResource.class
+org/demo/vertx/models/OrderStatut.class
+org/demo/vertx/verticle/ApiVerticle.class
+org/demo/vertx/Application.class

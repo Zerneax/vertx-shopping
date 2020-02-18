@@ -1,0 +1,15 @@
+<div class="container">
+
+  <p class="text-primary text-right">Bonjour, {{client.name}}</p>
+
+  <div class="columns">
+    <ng-container *ngFor="let order of orders">
+      <div class="column col-4 text-center mb-2">
+        <p>id : {{order.id}}</p>
+        <p>client : {{order.client}}</p>
+        <p>product : {{order.product}}</p>
+        <p>statut : {{order.statut}}</p>
+      </div>
+    </ng-container>
+  </div>
+</div>
