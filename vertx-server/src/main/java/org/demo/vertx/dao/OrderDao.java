@@ -22,7 +22,7 @@ public class OrderDao {
     public OrderDao() {
         this.orders = new ArrayList<>();
         this.orders.add(new Order("0a249a1e-528a-11ea-8d77-2e728ce88125", "PS4", "toto", OrderStatut.READY));
-        this.orders.add(new Order("0a249c8a-528a-11ea-8d77-2e728ce88125", "Santoku 18cm","Christopher Devalez ", OrderStatut.READY));
+        this.orders.add(new Order("0a249c8a-528a-11ea-8d77-2e728ce88125", "Santoku 18cm","Christopher Devalez", OrderStatut.READY));
         this.orders.add(new Order("0a249dd4-528a-11ea-8d77-2e728ce88125", "Headphone","Christopher Devalez", OrderStatut.READY));
         this.orders.add(new Order("0a24a0f4-528a-11ea-8d77-2e728ce88125", "Ipad","Christopher Devalez", OrderStatut.READY));
         this.orders.add(new Order("0a24a43c-528a-11ea-8d77-2e728ce88125", "dell xps 13","Christopher Devalez", OrderStatut.READY));
@@ -44,6 +44,13 @@ public class OrderDao {
         List<Order> orders = this.orders.stream().filter(o -> o.getClient().equalsIgnoreCase(client)).collect(Collectors.toList());
         return orders;
     }
+
+    public List<Order> getOrdersReady() {
+        this.logger.info(Utils.getTimestamp() + " : getOrdersReady() was called");
+        List<Order> orders = this.orders.stream().filter(o -> o.getStatut().toString().equals( OrderStatut.READY.toString())).collect(Collectors.toList());
+        return orders;
+    }
+
 
     public Order createNewOrder(String client, String product) {
         this.logger.info(Utils.getTimestamp() + " : createNewOrder("+ client + ", " + product + ") was called");

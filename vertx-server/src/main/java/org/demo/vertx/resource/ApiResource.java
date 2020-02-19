@@ -31,7 +31,9 @@ public class ApiResource {
         subRouter.post("/").handler(this::createOrder);
         subRouter.put("/:id/transit").handler(this::changeOrderStatutToTransit);
         subRouter.put("/:id/delivered").handler(this::changeOrderStatutToDelivered);
+        subRouter.get("/ready").handler(this::getOrdersReady);
         subRouter.get("/:client").handler(this::getOrdersOfClient);
+
         return subRouter;
     }
 
@@ -51,6 +53,19 @@ public class ApiResource {
         final String client = routingContext.pathParam("client");
 
         List<Order> orders = this.orderDao.getOrdersByClient(client);
+
+        final JsonObject jsonResponse = new JsonObject();
+        jsonResponse.put("orders", orders);
+
+        routingContext.response()
+                .setStatusCode(200)
+                .putHeader("content-type", "application/json")
+                .end(Json.encode(jsonResponse));
+    }
+
+    public void getOrdersReady(RoutingContext routingContext) {
+
+        List<Order> orders = this.orderDao.getOrdersReady();
 
         final JsonObject jsonResponse = new JsonObject();
         jsonResponse.put("orders", orders);

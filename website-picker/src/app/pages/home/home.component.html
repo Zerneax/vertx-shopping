@@ -1,0 +1,15 @@
+<div class="container">
+  <div class="columns">
+    <ng-container *ngFor="let order of orders">
+      <div class="column col-4 text-center mb-2 p-2">
+        <div class="order p-2">
+          <!-- <p>id : {{order.id}}</p> -->
+          <p>client : {{order.client}}</p>
+          <p>product : {{order.product}}</p>
+          <p>statut : {{order.statut}}</p>
+          <button class="btn btn-secondary">pick</button>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+</div>
