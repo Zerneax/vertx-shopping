@@ -31,6 +31,7 @@ public class ApiResource {
         subRouter.post("/").handler(this::createOrder);
         subRouter.put("/:id/transit").handler(this::changeOrderStatutToTransit);
         subRouter.put("/:id/delivered").handler(this::changeOrderStatutToDelivered);
+        subRouter.get("/:client").handler(this::getOrdersOfClient);
         return subRouter;
     }
 
@@ -46,12 +47,26 @@ public class ApiResource {
                 .end(Json.encode(jsonResponse));
     }
 
+    public void getOrdersOfClient(RoutingContext routingContext) {
+        final String client = routingContext.pathParam("client");
+
+        List<Order> orders = this.orderDao.getOrdersByClient(client);
+
+        final JsonObject jsonResponse = new JsonObject();
+        jsonResponse.put("orders", orders);
+
+        routingContext.response()
+                .setStatusCode(200)
+                .putHeader("content-type", "application/json")
+                .end(Json.encode(jsonResponse));
+    }
+
     public void createOrder(RoutingContext routingContext) {
         this.LOGGER.info("Creating new order....");
         final JsonObject body = routingContext.getBodyAsJson();
-        final String label = body.getString("label");
         final String client = body.getString("client");
-        final Order order = this.orderDao.createNewOrder(label, client);
+        final String product = body.getString("product");
+        final Order order = this.orderDao.createNewOrder(client, product);
 
         this.vertx.eventBus().publish("event", "new event");
 

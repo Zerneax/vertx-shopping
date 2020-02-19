@@ -1,15 +1,22 @@
 <div class="container">
 
   <p class="text-primary text-right">Bonjour, {{client.name}}</p>
-
+  <button class="btn btn-primary" (click)="refresh()"> refresh</button>
+  
   <div class="columns">
     <ng-container *ngFor="let order of orders">
-      <div class="column col-4 text-center mb-2">
-        <p>id : {{order.id}}</p>
-        <p>client : {{order.client}}</p>
-        <p>product : {{order.product}}</p>
-        <p>statut : {{order.statut}}</p>
+      <div class="column col-4 text-center mb-2 p-2">
+        <div class="order">
+          <!-- <p>id : {{order.id}}</p> -->
+          <p>client : {{order.client}}</p>
+          <p>product : {{order.product}}</p>
+          <p>statut : {{order.statut}}</p>
+        </div>
       </div>
     </ng-container>
+  </div>
+
+  <div class="text-center">
+    <button class="btn btn-primary" (click)="goBuy()">Buy new product</button>
   </div>
 </div>

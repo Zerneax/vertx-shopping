@@ -1,0 +1,14 @@
+<div class="container">
+  <div class="columns">
+    <div class="column col-6 col-mx-auto text-center">
+      <form [formGroup]="buyForm">
+        <div class="form-group">
+          <label class="form-label" for="input-product">Product</label>
+          <input class="form-input" type="text" id="input-product" formControlName="product">
+        </div>
+
+        <button class="btn btn-primary" [disabled]="buyForm.invalid" (click)="buy()">buy</button>
+      </form>
+    </div>
+  </div>
+</div>
