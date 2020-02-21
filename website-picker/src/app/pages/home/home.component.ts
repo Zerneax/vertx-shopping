@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import * as EventBus from 'vertx3-eventbus-client';
 
 @Component({
   selector: 'app-home',
@@ -9,12 +10,14 @@ import { HttpClient } from '@angular/common/http';
 export class HomeComponent implements OnInit {
 
   public orders: Array<any> = new Array();
+  public eb;
 
   constructor(private httpClient: HttpClient) { }
 
   ngOnInit(): void {
-
+    this.initEventBus();
     this.getOrdersReady();
+
   }
 
   pickOrder(id: string) {
@@ -29,5 +32,26 @@ export class HomeComponent implements OnInit {
       (response: any) => this.orders= response.orders,
       (error) => console.log("KO")
     )
+  }
+
+  initEventBus() {
+    this.eb = new EventBus("http://localhost:8080/newOrder/", {"vertxbus_ping_interval": 3000});
+    this.eb.onopen = () => {
+      this.eb.registerHandler("event", {}, (error, message) => {
+          console.log("Message: " + message.body);
+          let newOrder = JSON.parse(JSON.stringify(message.body));
+          console.log("object : ", newOrder);
+          this.orders.push(newOrder);
+      });
+    }
+
+    // this.eb.enableReconnect(true);
+
+  }
+
+  send() {
+    this.eb.publish('event', "test", {}, (err, message) => {
+      console.log("ok");
+    });
   }
 }

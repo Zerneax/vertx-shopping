@@ -15,4 +15,5 @@ public class Order {
     private String product;
     private String client;
     private OrderStatut statut;
+
 }

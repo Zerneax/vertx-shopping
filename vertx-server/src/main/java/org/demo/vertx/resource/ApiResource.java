@@ -9,6 +9,7 @@ import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
 import io.vertx.ext.web.handler.BodyHandler;
 import org.demo.vertx.dao.OrderDao;
+import org.demo.vertx.models.CodecOrder;
 import org.demo.vertx.models.Order;
 
 import java.util.List;
@@ -83,8 +84,14 @@ public class ApiResource {
         final String product = body.getString("product");
         final Order order = this.orderDao.createNewOrder(client, product);
 
-        this.vertx.eventBus().publish("event", "new event");
+        final JsonObject orderJson = new JsonObject();
+        orderJson.put("id", order.getId());
+        orderJson.put("product", order.getProduct());
+        orderJson.put("client", order.getClient());
+        orderJson.put("statut", order.getStatut());
 
+        this.vertx.eventBus().publish("event", orderJson);
+        this.LOGGER.info("publish ok....");
         routingContext.response()
                 .setStatusCode(201)
                 .putHeader("content-type", "application/json")

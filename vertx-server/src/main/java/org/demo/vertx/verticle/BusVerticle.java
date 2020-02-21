@@ -11,24 +11,18 @@ import io.vertx.ext.web.Router;
 import io.vertx.ext.web.handler.CorsHandler;
 import io.vertx.ext.web.handler.sockjs.BridgeOptions;
 import io.vertx.ext.web.handler.sockjs.SockJSHandler;
-import org.demo.vertx.models.CodecOrder;
-import org.demo.vertx.models.Order;
-import org.demo.vertx.resource.ApiResource;
 import org.demo.vertx.utils.Utils;
 
 import java.util.HashSet;
 import java.util.Set;
 
-public class ApiVerticle extends AbstractVerticle {
+public class BusVerticle extends AbstractVerticle {
 
     private final static Logger logger = LoggerFactory.getLogger(ApiVerticle.class);
 
-    public ApiVerticle() {
-    }
-
     @Override
     public void start() throws Exception {
-        this.logger.info(Utils.getTimestamp() + " : ApiVerticle is started");
+        this.logger.info(Utils.getTimestamp() + " : BusVerticle is started");
 
         final Router router = Router.router(vertx);
 
@@ -49,11 +43,7 @@ public class ApiVerticle extends AbstractVerticle {
         allowedMethods.add(HttpMethod.PATCH);
         allowedMethods.add(HttpMethod.PUT);
 
-        router.route().handler(CorsHandler.create(".*.").allowedHeaders(allowedHeaders).allowedMethods(allowedMethods));
-
-        final ApiResource apiResource = new ApiResource(vertx);
-        final Router apiSubRouter = apiResource.getSubRouter(vertx);
-        router.mountSubRouter("/api/v1/orders", apiSubRouter);
+        router.route().handler(CorsHandler.create("http://localhost:4200").allowedHeaders(allowedHeaders).allowedMethods(allowedMethods));
 
 
         SockJSHandler sockJSHandler = SockJSHandler.create(vertx);
@@ -67,15 +57,13 @@ public class ApiVerticle extends AbstractVerticle {
             be.complete(true);
         }));
 
-        this.vertx.eventBus().registerDefaultCodec(Order.class, new CodecOrder());
-
-        vertx.createHttpServer(new HttpServerOptions().setLogActivity(true))
+        /*vertx.createHttpServer(new HttpServerOptions().setLogActivity(true))
                 .requestHandler(router)
-                .listen(8080);
+                .listen(8081);*/
     }
 
     @Override
     public void stop() throws Exception {
-        this.logger.info(Utils.getTimestamp() + " : ApiVerticle is stopped");
+        this.logger.info(Utils.getTimestamp() + " : BusVerticle is stoped");
     }
 }
