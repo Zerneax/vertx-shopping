@@ -14,10 +14,20 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {
 
+    this.getOrdersReady();
+  }
+
+  pickOrder(id: string) {
+    this.httpClient.put(`http://localhost:8080/api/v1/orders/${id}/transit`, {}).subscribe(
+      (response: any) => this.getOrdersReady(),
+      (error) => alert("ko")
+    );
+  }
+
+  getOrdersReady() {
     this.httpClient.get("http://localhost:8080/api/v1/orders/ready").subscribe(
       (response: any) => this.orders= response.orders,
       (error) => console.log("KO")
     )
   }
-
 }
