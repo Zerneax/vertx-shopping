@@ -59,6 +59,8 @@ public class ApiVerticle extends AbstractVerticle {
         SockJSHandler sockJSHandler = SockJSHandler.create(vertx);
         BridgeOptions options = new BridgeOptions()
                 .addInboundPermitted(new PermittedOptions().setAddress("event"))
+                .addInboundPermitted(new PermittedOptions().setAddress("ready.to.go"))
+                .addOutboundPermitted(new PermittedOptions().setAddress("ready.to.go"))
                 .addOutboundPermitted(new PermittedOptions().setAddress("event"));
         router.mountSubRouter("/newOrder", sockJSHandler.bridge(options, be -> {
             if(be.type() == BridgeEventType.SOCKET_CREATED)
@@ -68,6 +70,10 @@ public class ApiVerticle extends AbstractVerticle {
         }));
 
         this.vertx.eventBus().registerDefaultCodec(Order.class, new CodecOrder());
+
+        this.vertx.eventBus().consumer("delivered", res -> {
+            System.out.println("Order : " + res.body() + " has been deliver.");
+        });
 
         vertx.createHttpServer(new HttpServerOptions().setLogActivity(true))
                 .requestHandler(router)

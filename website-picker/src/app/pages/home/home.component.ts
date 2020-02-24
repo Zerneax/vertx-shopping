@@ -49,8 +49,8 @@ export class HomeComponent implements OnInit {
 
   }
 
-  send() {
-    this.eb.publish('event', "test", {}, (err, message) => {
+  send(idOrder: string) {
+    this.eb.publish('ready.to.go', idOrder, {}, (err, message) => {
       console.log("ok");
     });
   }
